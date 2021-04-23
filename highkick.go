@@ -1,6 +1,7 @@
 package highkick
 
 import (
+	"github.com/qw4n7y/highkick/src/client"
 	"github.com/qw4n7y/highkick/src/database"
 	"github.com/qw4n7y/highkick/src/models"
 	"github.com/qw4n7y/highkick/src/server"
@@ -19,10 +20,12 @@ var SetOutput = usecases.SetOutput
 
 // Database
 type SetupDatabaseOptions = database.SetupOptions
+
 var SetupDatabase = database.Setup
 
 // Server
 type RunServerParams = server.RunServerParams
+
 var RunServer = server.RunServer
 
 // Execution
@@ -42,4 +45,8 @@ var Log = usecases.Log
 
 // PubSub
 type PubSubMessage = models.PubSubMessage
+
 var JobsPubSub = usecases.JobsPubSub
+
+//
+var Assets = client.Files

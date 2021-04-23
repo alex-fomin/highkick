@@ -2,19 +2,19 @@ package main
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"log"
+	"net/http"
 	"sync"
 	"time"
 
 	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/contrib/static"
-	"github.com/gin-gonic/gin"
 	"github.com/qw4n7y/highkick"
 	"github.com/tidwall/gjson"
 )
 
 const HELLO_WORLD = "HELLO_WORLD"
-const DB = "root:root@tcp(127.0.0.1:3306)/highkick_dev?clientFoundRows=true&charset=utf8mb4&parseTime=true&multiStatements=true"
+const DB = "root@tcp(127.0.0.1:3306)/highkick_dev?clientFoundRows=true&charset=utf8mb4&parseTime=true&multiStatements=true"
 
 func HelloWorld(job *highkick.Job) error {
 	highkick.Lock(*job)
@@ -78,7 +78,14 @@ func main() {
 	engine.Use(cors.Default())
 
 	engine.Static("/app", ".")
-	engine.Use(static.Serve("/highkick/client", static.LocalFile("../client/build", true)))
+
+	engine.GET("/hk/*filepath", func(c *gin.Context) {
+		param := "web/build/" + c.Param("filepath")
+		c.FileFromFS(param, http.FS(highkick.Assets))
+	})
+
+	//engine.Use(static.Serve("/highkick/client", static.LocalFile("../client/build", true)))
+	//engine.Use(static.Serve("/highkick/client", highkick.Assets))
 
 	highkick.RunServer(engine, highkick.RunServerParams{
 		BasicAuthUser:     "root",
