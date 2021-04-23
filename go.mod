@@ -1,4 +1,4 @@
-module github.com/qw4n7y/highkick
+module github.com/alex-fomin/highkick
 
 go 1.16
 
